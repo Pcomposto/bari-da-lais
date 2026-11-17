@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; manifest-src 'self'; worker-src 'self'">
+  <title>Bari da Laís</title>
+  <meta name="description" content="Checklist das refeições e registro de líquidos — uso pessoal, offline.">
+  <meta name="theme-color" content="#0F6E66">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Bari da Laís">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <header class="topo"><h1>Bari da Laís</h1></header>
+  <main id="conteudo" tabindex="-1"><noscript>Ative o JavaScript para usar o app.</noscript></main>
+
+  <nav class="abas" aria-label="Seções">
+    <button type="button" class="tab" data-acao="aba" data-aba="hoje"><span aria-hidden="true">◉</span>Hoje</button>
+    <button type="button" class="tab" data-acao="aba" data-aba="cardapio"><span aria-hidden="true">☰</span>Cardápio</button>
+    <button type="button" class="tab" data-acao="aba" data-aba="liquidos"><span aria-hidden="true">💧</span>Líquidos</button>
+    <button type="button" class="tab" data-acao="aba" data-aba="alarmes"><span aria-hidden="true">⏰</span>Alarmes</button>
+    <button type="button" class="tab" data-acao="aba" data-aba="ajustes"><span aria-hidden="true">⚙</span>Ajustes</button>
+  </nav>
+
+  <div id="modal" class="modal" hidden></div>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="js/dados.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
