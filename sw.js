@@ -1,8 +1,8 @@
 /* Service worker: guarda o app para uso offline. Não guarda dados pessoais nem dispara notificações. */
-const VERSAO = 'bari-v1.0.2';
+const VERSAO = 'bari-v1.1.0';
 const ARQUIVOS = [
   './', './index.html', './css/app.css', './js/dados.js', './js/app.js', './manifest.webmanifest',
-  './icons/icon-180.png', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-512-maskable.png'
+  './icons/icon-180.png', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-512-maskable.png', './icons/marca.svg', './icons/icones.svg'
 ];
 
 self.addEventListener('install', ev => {
