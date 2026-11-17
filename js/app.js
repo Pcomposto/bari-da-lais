@@ -23,6 +23,7 @@
   const fmtL = n => (n / 1000).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' L';
   const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
   const valido = s => typeof s === 'string';
+  const ic = n => '<svg class="icon" aria-hidden="true"><use href="icons/icones.svg#' + n + '"></use></svg>';
 
   // ---------- estado e persistência ----------
   function padrao() {
@@ -138,19 +139,19 @@
     let h = '';
 
     if (!estaInstalado()) {
-      h += '<div class="banner info">Você está usando pelo navegador. Para uso diário, adicione à Tela de Início (veja Ajustes). Os registros do Safari e do app instalado ficam <b>separados</b>.</div>';
+      h += '<div class="banner info">' + ic('info') + '<span>Você está usando pelo navegador. Para uso diário, adicione à Tela de Início (veja Ajustes). Os registros do Safari e do app instalado ficam <b>separados</b>.</span></div>';
     }
 
-    h += '<section class="card fase"><div class="rotulo">Fase ativa</div><div class="fase-nome">' + esc(nomeFase(S.cfg.faseAtiva)) + '</div>';
+    h += '<section class="card fase"><div class="rotulo">' + ic('leaf') + 'Fase ativa</div><div class="fase-nome">' + esc(nomeFase(S.cfg.faseAtiva)) + '</div>';
     if (S.cfg.faseAtiva === 'pre') h += '<div class="sub">Cirurgia prevista: ' + fmtData(S.cfg.cirurgia) + '</div>';
     h += '</section>';
 
     h += '<nav class="dia-nav" aria-label="Escolher dia">' +
-      '<button type="button" class="btn-icone" data-acao="dia-ant" aria-label="Dia anterior">‹</button>' +
+      '<button type="button" class="btn-icone" data-acao="dia-ant" aria-label="Dia anterior">' + ic('left') + '</button>' +
       '<div class="dia-centro"><div class="dia-data">' + B.DIAS[diaSemana(dia)] + ', ' + fmtData(dia) + '</div>' +
       '<div class="sub">' + esc(rotuloEtapa(dia)) + '</div></div>' +
-      '<button type="button" class="btn-icone" data-acao="dia-prox" aria-label="Próximo dia">›</button></nav>';
-    if (!ehHoje) h += '<button type="button" class="btn-sec largo" data-acao="dia-hoje">Voltar para hoje</button>';
+      '<button type="button" class="btn-icone" data-acao="dia-prox" aria-label="Próximo dia">' + ic('right') + '</button></nav>';
+    if (!ehHoje) h += '<button type="button" class="btn-sec largo" data-acao="dia-hoje">' + ic('calendar') + ' Voltar para hoje</button>';
 
     // jejum / avisos
     if (jejum && ehHoje) {
@@ -167,13 +168,13 @@
 
     // líquidos
     const total = totalDia(dia);
-    h += '<section class="card liquidos" aria-live="polite"><div class="rotulo">Líquidos registrados ' + (ehHoje ? 'hoje' : 'em ' + fmtDataCurta(dia)) + '</div>' +
+    h += '<section class="card liquidos" aria-live="polite"><div class="rotulo">' + ic('drop') + 'Líquidos registrados ' + (ehHoje ? 'hoje' : 'em ' + fmtDataCurta(dia)) + '</div>' +
       '<div class="total" id="totalDia">' + fmtML(total) + '</div><div class="sub">' + fmtL(total) + ' · soma dos registros</div>';
     if (!(jejum && ehHoje)) {
       h += blocoMeta(dia, total);
       if (ehHoje) {
         h += '<div class="atalhos">' + S.cfg.atalhos.map(ml => '<button type="button" class="btn-grande" data-acao="add" data-ml="' + ml + '">+' + ml + ' mL</button>').join('') + '</div>' +
-          '<button type="button" class="btn-sec largo" data-acao="registrar">Outro volume / tipo / horário</button>' +
+          '<button type="button" class="btn-sec largo" data-acao="registrar">' + ic('plus') + ' Outro volume / tipo / horário</button>' +
           '<div class="sub">Tipo dos atalhos: <b>' + esc(S.cfg.ultimoTipo) + '</b> · <button type="button" class="link" data-acao="trocar-tipo">trocar</button></div>';
       }
     }
@@ -182,7 +183,7 @@
     // próxima refeição
     if (ehHoje && itens.length && !jejum) {
       const prox = proximaRefeicao(itens);
-      h += '<section class="card prox"><div class="rotulo">Próxima refeição</div>' +
+      h += '<section class="card prox"><div class="rotulo">' + ic('clock') + 'Próxima refeição</div>' +
         (prox ? '<div class="prox-nome">' + (prox.hora ? esc(prox.hora.replace(':', 'h')) + ' · ' : '') + esc(prox.nome) + '</div><div class="sub">' + esc(prox.texto) + '</div>'
           : '<div class="prox-nome">Todas marcadas</div>') + '</section>';
     }
@@ -249,7 +250,7 @@
       '<p class="porcao"><b>Porção/medida na folha:</b> ' + (med.length ? esc(med.join(' · ')) : 'não especificada') + '</p>' +
       (i.conf ? '<p class="conf">⚠️ Conferir: ' + esc(i.conf) + '</p>' : '') +
       '<button type="button" class="btn-check" data-acao="check" data-chave="' + esc(i.chave) + '" aria-pressed="' + feito + '">' +
-      (feito ? '✓ Feita' + (S.checks[i.chave].length > 10 ? ' às ' + fmtHora(S.checks[i.chave]) : '') + ' — toque para desmarcar' : 'Marcar como feita') + '</button></li>';
+      (feito ? ic('check') + ' Feita' + (S.checks[i.chave].length > 10 ? ' às ' + fmtHora(S.checks[i.chave]) : '') + ' — toque para desmarcar' : 'Marcar como feita') + '</button></li>';
   }
 
   function telaCardapio() {
@@ -314,7 +315,7 @@
     dias.forEach(d => {
       const regs = porDia[d].sort((a, b) => b.quando.localeCompare(a.quando));
       h += '<section class="card hist"><div class="lista-topo"><h3>' + B.DIAS_CURTOS[diaSemana(d)] + ', ' + fmtData(d) + '</h3><b>' + fmtML(regs.reduce((a, r) => a + Number(r.ml), 0)) + '</b></div><ul class="regs">' +
-        regs.map(r => '<li><button type="button" class="reg" data-acao="editar-liq" data-id="' + esc(r.id) + '"><span class="hora">' + fmtHora(r.quando) + '</span><span class="reg-tipo">' + esc(r.tipo) + '</span><span class="reg-ml">' + fmtML(r.ml) + '</span><span class="reg-ed" aria-hidden="true">Editar</span></button></li>').join('') + '</ul></section>';
+        regs.map(r => '<li><button type="button" class="reg" data-acao="editar-liq" data-id="' + esc(r.id) + '"><span class="hora">' + fmtHora(r.quando) + '</span><span class="reg-tipo">' + esc(r.tipo) + '</span><span class="reg-ml">' + fmtML(r.ml) + '</span><span class="reg-ed" aria-hidden="true">' + ic('edit') + '</span></button></li>').join('') + '</ul></section>';
     });
 
     const diasCheck = {};
@@ -335,8 +336,8 @@
 
   function telaAlarmes() {
     const f = S.cfg.faseAtiva, hs = horariosFase();
-    let h = '<h2>Alarmes no iPhone</h2><div class="banner info">O app não toca alarmes. Com a tela bloqueada, quem avisa é o app <b>Relógio</b> do iPhone, configurado por você.</div>';
-    h += '<section class="card"><div class="rotulo">Fase ativa</div><div class="fase-nome">' + esc(nomeFase(f)) + '</div>';
+    let h = '<h2>Alarmes no iPhone</h2><div class="banner info">' + ic('info') + '<span>O app não toca alarmes. Com a tela bloqueada, quem avisa é o app <b>Relógio</b> do iPhone, configurado por você.</span></div>';
+    h += '<section class="card"><div class="rotulo">' + ic('leaf') + 'Fase ativa</div><div class="fase-nome">' + esc(nomeFase(f)) + '</div>';
     if (!hs.length) h += '<p>Nenhuma fase ativa: não há horários para configurar.</p>';
     else {
       h += '<ul class="horarios">' + hs.map(x => '<li><span class="hora">' + (x.hora ? esc(x.hora.replace(':', 'h')) : '—') + '</span><span>' + esc(x.nome) + '</span></li>').join('') + '</ul>';
@@ -389,7 +390,7 @@
       '<button type="submit" class="btn-sec largo">Salvar atalhos</button></form>';
 
     h += '<section class="card form"><h3>Backup</h3><p class="sub">Os dados ficam só neste aparelho e neste app. Exporte um backup com frequência (ex.: salve em Arquivos ou envie para você mesma).</p>' +
-      '<button type="button" class="btn-grande largo" data-acao="exportar">Exportar backup (.json)</button>' +
+      '<button type="button" class="btn-grande largo" data-acao="exportar">' + ic('download') + ' Exportar backup (.json)</button>' +
       '<label class="btn-sec largo arquivo">Restaurar backup…<input id="importar" type="file" accept="application/json,.json"></label>' +
       '<p class="sub" id="infoArmaz">' + esc(infoArmazenamento()) + '</p></section>';
 
@@ -425,7 +426,7 @@
 
   function abrirModal(titulo, corpo, aoMontar) {
     const m = $('#modal');
-    m.innerHTML = '<div class="modal-caixa" role="dialog" aria-modal="true" aria-labelledby="modalTitulo"><div class="modal-topo"><h2 id="modalTitulo">' + esc(titulo) + '</h2><button type="button" class="btn-icone" data-acao="fechar-modal" aria-label="Fechar">×</button></div>' + corpo + '</div>';
+    m.innerHTML = '<div class="modal-caixa" role="dialog" aria-modal="true" aria-labelledby="modalTitulo"><div class="modal-topo"><h2 id="modalTitulo">' + esc(titulo) + '</h2><button type="button" class="btn-icone" data-acao="fechar-modal" aria-label="Fechar">' + ic('close') + '</button></div>' + corpo + '</div>';
     m.hidden = false; document.body.classList.add('com-modal');
     if (aoMontar) aoMontar(m);
   }
